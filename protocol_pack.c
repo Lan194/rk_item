@@ -60,7 +60,11 @@ int pack_sensor_status_frame(uint8_t *out, business_state_t *s)
     put_u16_be(&out[20], s->h2s);
     put_u16_be(&out[22], s->ch4);
 
-    /*罗盘、X/Y坐标、预留全部置0*/
+    /*罗盘航向角、触摸X、触摸Y——上位机期望顺序：罗盘, X, Y*/
+    put_u16_be(&out[24], s->compass);
+    put_u16_be(&out[26], s->touch_x);
+    put_u16_be(&out[28], s->touch_y);
+    /*30‑45 预留*/
     uint16_t crc = crc16_calc(out,46);
     put_u16_be(&out[46], crc);
     return 48;

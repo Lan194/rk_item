@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <termios.h>
 
 static int uart_fd = -1;
@@ -31,7 +32,7 @@ int uart_open(const char *dev, int baudrate)
     opt.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
     opt.c_oflag &= ~OPOST;
 
-    opt.c_cc[VTIME] = 5;
+    opt.c_cc[VTIME] = 1; /*缩短读超时，避免阻塞触摸读取*/
     opt.c_cc[VMIN] = 0;
     tcsetattr(fd, TCSANOW, &opt);
     uart_fd = fd;
@@ -42,7 +43,19 @@ int uart_send_data(uint8_t *buf, int len)
 {
     if(uart_fd <0 || buf == NULL || len <=0)
         return -1;
-    return write(uart_fd, buf, len);
+    int sent = 0;
+    while(sent < len)
+    {
+        ssize_t n = write(uart_fd, buf + sent, len - sent);
+        if(n < 0)
+        {
+            if(errno == EINTR) continue;
+            return -1;
+        }
+        if(n == 0) return -1;
+        sent += (int)n;
+    }
+    return sent;
 }
 
 int uart_recv_data(uint8_t *buf, int max_len)

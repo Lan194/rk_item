@@ -16,3 +16,21 @@ uint16_t crc16_calc(uint8_t *data, int len)
     }
     return crc;
 }
+
+/*PTU下行指令CRC8：多项式0x07，初值0x00，MSB优先，无反射，无输出异或*/
+uint8_t crc8_calc(uint8_t *data, int len)
+{
+    uint8_t crc = 0x00;
+    for(int i=0;i<len;i++)
+    {
+        crc ^= data[i];
+        for(int j=0;j<8;j++)
+        {
+            if(crc & 0x80)
+                crc = (uint8_t)((crc<<1) ^ 0x07);
+            else
+                crc = (uint8_t)(crc<<1);
+        }
+    }
+    return crc;
+}

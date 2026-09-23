@@ -1,0 +1,1 @@
+cmd_/home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/Module.symvers :=  sed 's/ko$$/o/'  /home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/modules.order | scripts/mod/modpost       -o /home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/Module.symvers -e -i Module.symvers -T - 

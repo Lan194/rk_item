@@ -1,1 +1,0 @@
-cmd_/home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/gpio_buzzer.mod := printf '%s\n'   gpio_buzzer.o | awk '!x[$$0]++ { print("/home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/"$$0) }' > /home/linux/rk3506_linux6.1_sdk_v1.2.0/kernel-6.1/rk_item/gpio_buzzer.mod
